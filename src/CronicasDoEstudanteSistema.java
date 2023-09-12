@@ -1,52 +1,93 @@
+import java.time.LocalDate;
+
 public class CronicasDoEstudanteSistema {
-    private Cronica[] cronicas;
-    private int LIMITECRONICAS;
-    private int contador;
+    private Chronicle[] chronicles;
+    private Booklet[] booklets;
+    private int MAXCHRONICLESQUANTITY;
+    private int counter;
 
     public CronicasDoEstudanteSistema(){
-        LIMITECRONICAS = 1000;
-        contador = 0;
-        cronicas = new Cronica[LIMITECRONICAS];
+        MAXCHRONICLESQUANTITY = 1000;
+        counter = 0;
+        chronicles = new Chronicle[MAXCHRONICLESQUANTITY];
     }
 
-    public String registraCronica(String nome, String conteudo, String autor){
+    public String registerChronicle(String nome, String conteudo, LocalDate data, String autor){
         try{
-            Cronica cronica = new Cronica(nome, conteudo, autor);
-            cronicas[contador] = cronica;
-            contador++;
+            Chronicle chronicle = new Chronicle(nome, conteudo, data, autor);
+            chronicles[counter] = chronicle;
+            chronicle.setPosition(counter);
+            counter++;
             return "Crônica cadastrada com sucesso.";
         } catch (Exception e){
             return "Crônica não cadastrada.";
         }
     }
 
-    public String registraCronica(String nome, String conteudo){
-        try{
-            Cronica cronica = new Cronica(nome, conteudo);
-            cronicas[contador] = cronica;
-            contador++;
-            return "Crônica de autor anônimo cadastrada com sucesso.";
-        } catch (Exception e){
-            return "Crônica não cadastrada.";
-        }
+    public String registerChronicle(String nome, String conteudo, LocalDate data){
+            Chronicle chronicle = new Chronicle(nome, conteudo, data);
+            if (!(checkExistingChronicle(chronicle))){
+                try {
+                    chronicles[counter] = chronicle;
+                } catch (ArrayIndexOutOfBoundsException aioobe) {
+                    return "Crônica não cadastrada. Posição inválida." + aioobe;
+                }
+                chronicle.setPosition(counter);
+                counter++;
+                return "Crônica de autor anônimo cadastrada com sucesso.";
+            }
+            return "Crônica já cadastrada. Não é permitido duplicatas.";
     }
 
-    public String lerCronica(int posicao){
-        if(cronicas[posicao] != null){
-            cronicas[posicao].incrementaQuantidadeLeituras();
-            return cronicas[posicao].getConteudo();
+    public boolean checkExistingChronicle(Chronicle baseChronicle){
+        for (int i = 0; i < counter; i++) {
+            if (chronicles[i].equals(baseChronicle)) return true;
+        } return false;
+    }
+
+    public void creatBooklet(CronicasDoEstudanteSistema system, int[] chronicles){
+        Booklet booklet = new Booklet(system, chronicles);
+    }
+
+    public String readBooklet(int bookletPosition){
+        return formatBookletChronicles(booklets[bookletPosition]);
+    }
+
+    private String formatBookletChronicles(Booklet booklet){
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < booklet.getChronicles().length; i++) {
+            sb.append(booklet.getChronicles()[i].getContent());
+            if (i < booklet.getChronicles().length) sb.append("\n");
+        }
+        return sb.toString();
+    }
+
+    public String readChronicle(int position){
+        if(chronicles[position] != null){
+            chronicles[position].sumsReadingQuantity();
+            return chronicles[position].getContent();
         } else {
             return "Crônica não cadastrada.";
         }
     }
 
-    public String exibirCronicaMaisLida(){
-        Cronica maisLida = cronicas[0];
-        for (int i = 1; i < cronicas.length; i++) {
-            if (cronicas[i].getQuantidadeDeLeituras() > maisLida.getQuantidadeDeLeituras()){
-                maisLida = cronicas[i];
+    public String showMostReadChronicle(){
+        Chronicle mostRead = chronicles[0];
+        for (int i = 1; i < counter; i++) {
+            if (chronicles[i].getReadingQuantity() > mostRead.getReadingQuantity()){
+                mostRead = chronicles[i];
             }
         }
-        return maisLida.getConteudo();
+        return mostRead.getContent() + " - lida " + mostRead.getReadingQuantity() + " vezes";
+    }
+
+    public void listChronicles(){
+        for (int i = 0; i < counter; i++) {
+            System.out.println(chronicles[i]);
+        }
+    }
+
+    public Chronicle[] getChronicles() {
+        return this.chronicles;
     }
 }
