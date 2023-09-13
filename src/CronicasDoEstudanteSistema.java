@@ -6,12 +6,15 @@ public class CronicasDoEstudanteSistema {
     private int MAXCHRONICLESQUANTITY;
     private int counterChronicles;
     private int counterBookletChronicles;
+    private int MAXBOOKLETSQUANTITY;
 
     public CronicasDoEstudanteSistema(){
         MAXCHRONICLESQUANTITY = 1000;
+        MAXBOOKLETSQUANTITY = 100;
         counterChronicles = 0;
         counterBookletChronicles = 0;
         chronicles = new Chronicle[MAXCHRONICLESQUANTITY];
+        booklets = new Booklet[MAXBOOKLETSQUANTITY];
     }
 
     public String registerChronicle(String nome, String conteudo, LocalDate data, String autor){
@@ -53,12 +56,12 @@ public class CronicasDoEstudanteSistema {
             booklets[counterBookletChronicles] = booklet;
             counterBookletChronicles++;
         } catch (Exception e){
-            //
+            System.out.println("Error");
         }
     }
 
     public String readBooklet(int bookletPosition){
-        return formatBookletChronicles(booklets[bookletPosition]);
+        return formatBookletChronicles(this.booklets[bookletPosition]);
     }
 
     private String formatBookletChronicles(Booklet booklet){

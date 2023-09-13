@@ -5,18 +5,17 @@ public class Booklet {
     public Booklet(CronicasDoEstudanteSistema sistema, int[] booksPositioning){
         MAXCHRONICLES = 3;
         chronicles = new Chronicle[MAXCHRONICLES];
-        if(addChronicle(sistema, booksPositioning)) System.out.println("Booklet successfully created.");
-        else System.out.println("Error creating booklet");
+        try {
+            addChronicle(sistema, booksPositioning);
+        } catch (Exception e){
+            System.out.println("Error creating booklet");
+        }
     }
 
-    private boolean addChronicle(CronicasDoEstudanteSistema sistema, int[] booksPositioning){
+    private void addChronicle(CronicasDoEstudanteSistema sistema, int[] booksPositioning){
         for (int i = 0; i < booksPositioning.length; i++) {
-            try{
-                chronicles[i] = sistema.getChronicles()[booksPositioning[i]];
-            } catch (Exception e){
-                return false;
-            }
-        } return true;
+            chronicles[i] = sistema.getChronicles()[booksPositioning[i]];
+        }
     }
 
     public Chronicle[] getChronicles() {
