@@ -25,5 +25,34 @@ bin/
 ### VS Code ###
 .vscode/
 
-### Mac OS ###
+
+# IntelliJ IDEA files
+.idea/
+
+# Compiled bytecode
+*.class
+
+# Maven specific
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+pom.xml.*
+
+# Gradle specific
+.gradle/
+build/
+
+# Logs
+logs/
+*.log
+
+# IDE-specific configuration files
+*.iml
+*.ipr
+*.iws
+
+# OS-specific files
 .DS_Store
+Thumbs.db
